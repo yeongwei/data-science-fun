@@ -1,0 +1,78 @@
+---
+title: "A Study of Relationship Between Variance and Mean"
+author: "YeongWei"
+date: "Tuesday, November 10, 2015"
+output: html_document
+---
+
+# Introduction
+This document aims to study the relationship between Variance and Mean by using the data from die rolling as samples.
+
+# Function
+This section consist of the various function blocks used to execute the study.
+
+## Die Row
+```{r }
+dieRow <- function(numOfRow) { 
+  sample(c(1,2,3,4,5,6), numOfRow, replace = TRUE)
+};
+```
+
+## Biased Variance
+Not available.
+```{r echo=FALSE}
+biasedVariance <- function(randomVariable) {
+  sum((randomVariable - mean(randomVariable))^2) / length(randomVariable)
+};
+```
+
+## Unbiased Variance
+```{r}
+unbiasedVariance <- function(randomVariable) {
+  sum((randomVariable - mean(randomVariable))^2) / (length(randomVariable) - 1)
+};
+```
+
+## Main Run
+```{r}
+run <- function(numOfAttempts, numOfRow, print = TRUE) {
+  DATA <- data.frame(Mean = c(), Variance = c(), NumberOfRows = c(), NumberOfAttempts = c());
+  
+  for (m in numOfAttempts) {
+    for (n in numOfRow) {
+      
+      sample_ <- matrix(dieRow(n * m), m);
+      mean_ <- rowMeans(sample_);
+      biasedVariance_ <- apply(sample_, 1, function(eachRow) { biasedVariance(eachRow) });
+      data_ = cbind(mean_, biasedVariance_, n, m);
+      DATA <- rbind(DATA, data_);
+      
+    }
+  }
+  
+  colnames(DATA) <- c("Mean", "Variance", "NumberOfRows", "NumberOfAttempts");
+  
+  library(ggplot2)
+  PLOT <- ggplot(DATA, aes(x = Mean, y = Variance, color = NumberOfRows), width = 1000);
+  PLOT <- PLOT + geom_point() + facet_grid(NumberOfRows ~ NumberOfAttempts);
+  PLOT <- PLOT + labs(title = "Variance Vs Mean by No. of Attempts and No. of Die Rows")
+  
+  if (print) {
+    print(PLOT);  
+  } else {
+    str(DATA); 
+  }
+}
+```
+
+# Execution
+```{r}
+run(c(100, 1000), seq(from = 100, to = 500, by = 100));
+```
+
+# Result
+N / A
+
+# Future Work
+N / A
+
