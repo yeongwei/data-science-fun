@@ -8,6 +8,9 @@ output: html_document
 # Introduction
 This document aims to study the relationship between Variance and Mean by using the data from die rolling as samples.
 
+# Procedure
+
+
 # Function
 This section consist of the various function blocks used to execute the study.
 
@@ -19,7 +22,7 @@ dieRow <- function(numOfRow) {
 ```
 
 ## Biased Variance
-Not available.
+N / A
 ```{r echo=FALSE}
 biasedVariance <- function(randomVariable) {
   sum((randomVariable - mean(randomVariable))^2) / length(randomVariable)
